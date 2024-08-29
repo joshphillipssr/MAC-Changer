@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 
 import subprocess
+import optparse
 
-interface = input("interface (e.g. eth0) > ")
-new_mac = input("mac address (e.g. 00:11:22:33:44:44) > ")
+parser = optparse.OptionParser()
+parser.add_option("-i", "--interface", dest="interface", help="Interface to change MAC address of")
+parser.add_option("-m", "--mac", dest="new_mac", help="New MAC address")
+
+(options, arguments) = parser.parse_args()
+
+interface = options.interface
+new_mac = options.new_mac
 
 print("[+] Changing MAC address for " + interface + " to " + new_mac)
 
