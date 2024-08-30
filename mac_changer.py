@@ -9,10 +9,12 @@ def get_arguments():
     parser.add_option("-i", "--interface", dest="interface", help="Interface to change MAC address of")
     parser.add_option("-m", "--mac", dest="new_mac", help="New MAC address")
     (options, arguments) = parser.parse_args()
+
     if not options.interface:
-        parser.error("[-] Please specify an interface. Use --help for more info.")
+        options.interface = input("[*] Please enter the interface (e.g. eth0): ")
     if not options.new_mac:
-        parser.error("[-] Please specify a MAC address. Use --help for more info.")
+        options.new_mac = input("[*] Please enter the new MAC address (e.g. 00:11:22:33:44:55): ")
+
     return options
 
 def change_mac(interface, new_mac):
@@ -29,16 +31,18 @@ def get_current_mac(interface):
         return mac_address_search_result.group(0)
     else:
         print("[-] Could not read MAC address.")
+        return None
 
 options = get_arguments()
 
 current_mac = get_current_mac(options.interface)
-print("Current MAC = " + str(current_mac))
+if current_mac:
+    print("Current MAC = " + str(current_mac))
 
-change_mac(options.interface, options.new_mac)
+    change_mac(options.interface, options.new_mac)
 
-current_mac = get_current_mac(options.interface)
-if current_mac == options.new_mac:
-    print("[+] MAC address was successfully changed to " + current_mac)
-else:
-    print("[-] MAC address did not get changed.")
+    current_mac = get_current_mac(options.interface)
+    if current_mac == options.new_mac:
+        print("[+] MAC address was successfully changed to " + current_mac)
+    else:
+        print("[-] MAC address did not get changed.")
